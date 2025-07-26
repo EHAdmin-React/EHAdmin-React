@@ -14,6 +14,11 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false } // Railway usa SSL
 });
 
+// Iniciar servidor
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en puerto ${PORT}`);
+});
+
 // Ruta de prueba
 app.get('/ping', (req, res) => {
   res.json({ message: 'Servidor funcionando 🚀' });

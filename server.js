@@ -35,5 +35,5 @@ app.get('/usuarios', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5432;
 app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));

@@ -11,34 +11,32 @@ app.use(express.json());
 // Configura la conexión a PostgreSQL usando variables de entorno
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // Railway usa SSL
-});
-
-// Ruta de prueba
-app.get('/ping', (req, res) => {
-  res.json({ message: 'Servidor funcionando 🚀' });
-});
-
-// Ruta ejemplo para traer datos
-app.get('/usuarios', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM usuarios');
-    res.json(result.rows);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener datos' });
+  ssl: {
+    rejectUnauthorized: false // Requerido por Render
   }
 });
 
-// Ruta ejemplo para traer datos
+// Ejemplo: ruta para obtener proyectos desde t_proyectos
 app.get('/proyectos', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM t_proyectos');
+    const result = await pool.query(`
+      SELECT p.id, p.nombre, e.nombre AS estado
+      FROM t_proyectos p
+      JOIN t_estados e ON p.id_estado = e.id
+    `);
     res.json(result.rows);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener datos' });
+  } catch (err) {
+    console.error('Error al obtener proyectos:', err);
+    res.status(500).json({ error: 'Error al consultar la base de datos' });
   }
 });
-const PORT = process.env.PORT || 5432;
-app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
+
+// Ruta simple de prueba
+app.get('/ping', (req, res) => {
+  res.send({ mensaje: 'Servidor funcionando' });
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
+});

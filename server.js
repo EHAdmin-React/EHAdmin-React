@@ -30,5 +30,15 @@ app.get('/usuarios', async (req, res) => {
   }
 });
 
+// Ruta ejemplo para traer datos
+app.get('/proyectos', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM t_proyectos');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener datos' });
+  }
+});
 const PORT = process.env.PORT || 5432;
 app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));

@@ -20,7 +20,7 @@ const pool = new Pool({
 app.get('/proyectos', async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT p.id, p.nombre, e.nombre AS estado
+      SELECT p.id, p.nombre, e.nombre_estado AS estado
       FROM t_proyectos p
       JOIN t_estados e ON p.id_estado = e.id
     `);

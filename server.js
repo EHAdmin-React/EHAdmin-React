@@ -20,9 +20,16 @@ const pool = new Pool({
 app.get('/proyectos', async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT p.id, p.nombre, e.nombre_estado AS estado
+      SELECT 
+        p.id,
+        tp.tipo_proyecto AS tipo_proyecto,
+        p.nombre, 
+        e.nombre_estado AS estado
+        
       FROM t_proyectos p
       JOIN t_estados e ON p.id_estado = e.id
+      JOIN t_tipos_proyecto tp ON p.id_tipo_proyecto = tp.id
+      ORDER BY p.id;
     `);
     res.json(result.rows);
   } catch (err) {
